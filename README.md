@@ -112,4 +112,16 @@ The goal is to produce a simple, interpretable model and examine which features 
 
 ---
 
+##Reproducibility Instructions
+
+To reproduce this analysis:
+	1.	Download the StatsBomb Open Data repository from: https://github.com/statsbomb/open-data
+	2.	Make sure the events folder is available in your working directory, or update the file paths in the notebook based on where you store the data.
+	3.	Install the required Python packages listed in requirements.txt
+	4.	Open the penalty_analysis.ipynb notebook.
+	5.	Run all cells in order. This will recreate the data loading, feature engineering, EDA, hypothesis tests, and machine learning steps used in this project.
+
+
+---
+
 **Tulga Berke Kayhan**
