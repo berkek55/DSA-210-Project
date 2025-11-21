@@ -1,65 +1,115 @@
-# DSA-210-Project
 # Penalty Kick Outcomes – DSA210 Project
 
 ## Overview
-This project looks at what affects the success of a penalty kick in football.  
-Using open data from StatsBomb, I’ll analyze different factors such as the player’s foot, shot technique, and match pressure to see how they influence whether the penalty is scored or missed.
+This project analyzes what affects the success of a penalty kick in football using StatsBomb open event data.  
+The goal is to explore which factors — such as game pressure, shot direction, and match context — influence whether a penalty is scored or missed.
 
-The main goals are:
-- To clean and explore real football event data
-- To learn and apply basic machine learning
-- To create clear visualizations and insights about penalty patterns
+The project includes:
+- Data collection from StatsBomb Open Data  
+- Cleaning and feature engineering  
+- Exploratory data analysis (EDA)  
+- Hypothesis testing  
+- A machine learning model to predict penalty success  
 
 ---
 
 ## Motivation
-Penalty kicks are short but high-pressure moments that often decide matches.  
-They’re also simple enough to model, which makes them a great way to learn data analysis and basic ML without dealing with huge or messy datasets.  
-I want to see if certain situations or techniques make scoring more likely.
+Penalty kicks are high-pressure moments that can decide matches.  
+They are also simple, well-defined events, making them a great setting to learn data analysis and machine learning without dealing with messy or overly large datasets.
+
+The project aims to understand:
+- How pressure affects performance  
+- Whether players change their decisions in stressful situations  
+- What features matter most for predicting success  
 
 ---
 
 ## Data Source
-I’ll use **[StatsBomb Open Data](https://github.com/statsbomb/open-data)**, which includes detailed match events for tournaments such as the FIFA World Cup and UEFA Euro.  
-Each match is stored as a JSON file, listing all passes, shots, and penalties.
+The dataset comes from **StatsBomb Open Data**, which provides structured JSON event files for major football competitions including the FIFA World Cup and UEFA Euro tournaments.
 
-From these files, I’ll extract only the penalty shot events (`shot.type.name == "Penalty"`).  
-Relevant fields include:
-- `player.name`
-- `shot.outcome.name`
-- `shot.technique.name`
-- `shot.body_part.name`
-- `under_pressure`
-- `competition_stage`
-- `minute` and `match_id`
+Repository link:  
+https://github.com/statsbomb/open-data
+
+From the event files, I extracted all **penalty shot events** (`shot.type.name == "Penalty"`), along with contextual information such as:
+- player name  
+- team name  
+- shot outcome  
+- shot technique  
+- minute of the match  
+- event location  
+- match ID  
 
 ---
 
 ## Data Enrichment
-To follow the project requirement of combining datasets, I’ll add extra contextual information:
+To meet the project requirement of combining datasets and to improve the predictive model, I engineered several new features:
 
-1. **Psychological Pressure (Simple Version)**  
-   - Create a new column based on `competition_stage`:  
-     Finals and semi-finals → “High pressure”,  
-     Knockouts → “Medium pressure”,  
-     Group matches → “Low pressure”.
+### **1. Reconstructed Scoreline**
+For every penalty, I counted how many goals each team had scored up to that exact moment:
+- `team_goals_before`  
+- `opp_goals_before`  
+- `score_diff`  
 
-2. **Situational Pressure (Optional Enhancement)**  
-   - Later in the project, if time allows, I’ll reconstruct the *scoreline at the moment of the penalty* by counting goals before the event.  
-   - This will give a more realistic measure of pressure (for example, a 0–0 penalty in the 90th minute = high pressure).
+This captures game context more realistically.
 
-3. **Player Footedness**  
-   - Add a small CSV with each player’s dominant foot (Left or Right) and merge it with the main dataset.
+### **2. Pressure Classification**
+Using minute + score difference + late-game conditions, I created a custom pressure feature:
+- **Extreme:** shootouts or minute ≥ 120, or late close games  
+- **High:** second-half close games  
+- **Medium:** early close games or moderate margins  
+- **Low:** early or low-stress situations  
 
-These enrichments make the dataset more meaningful and help analyze both technical and psychological aspects of penalty success.
+This pressure metric was validated using hypothesis testing.
+
+### **3. Shot Direction Simplification**
+Using the shot's end location (y-coordinate), I categorized penalties into:
+- Left  
+- Centre  
+- Right  
+
+based on equal 1/3 goal-width bins.
 
 ---
 
+## Exploratory Data Analysis
+I explored:
+- penalty success distributions  
+- direction frequencies  
+- pressure level distributions  
+- how direction and pressure interact  
+- how miss types are distributed  
 
-## Expected Outcome
-A clear, data-driven summary of what makes a penalty more or less likely to succeed, along with visualizations and a simple predictive model.  
-If time allows, I’ll also include the reconstructed in-match score to analyze how real pressure affects performance.
+Visualizations were created to show patterns in the data.
 
 ---
- 
-Tulga Berke Kayhan
+
+## Hypothesis Testing
+I ran three chi-square tests:
+
+1. **Pressure → Penalty Success**  
+   ✔ *Significant* — pressure affects scoring rate.
+
+2. **Pressure → Shot Direction**  
+   ✖ *Not significant* — players keep their usual direction under pressure.
+
+3. **Pressure → Miss Type** (saved / off target / post)  
+   ✖ *Not significant* — pressure changes success, not the type of mistake.
+
+These results show that pressure affects **execution**, not **decision-making**, which fits well with football psychology.
+
+---
+
+## Machine Learning (Next Step)
+The next part of the project is to build a **logistic regression model** to predict whether a penalty will be scored based on features like:
+- pressure  
+- minute  
+- score difference  
+- direction  
+- shot technique  
+- competition  
+
+The goal is to produce a simple, interpretable model and examine which features have the strongest influence.
+
+---
+
+**Tulga Berke Kayhan**
