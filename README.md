@@ -112,7 +112,7 @@ The goal is to produce a simple, interpretable model and examine which features 
 
 ---
 
-##Reproducibility Instructions
+## Reproducibility Instructions
 
 To reproduce this analysis:
 	1.	Download the StatsBomb Open Data repository from: https://github.com/statsbomb/open-data
