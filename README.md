@@ -71,6 +71,34 @@ based on equal 1/3 goal-width bins.
 
 ---
 
+## Methodology
+
+The project follows a structured workflow to ensure the analysis is reproducible and interpretable:
+
+1. Data Collection:
+   I downloaded the StatsBomb Open Data repository and extracted all event files for the competitions provided. From these JSON files, I filtered only the events where the shot type was a penalty.
+
+2. Data Cleaning:
+   I normalized the event structure and removed irrelevant or missing fields. I also reconstructed the scoreline before each penalty by counting goals up to that moment. Shot outcome, direction, and technique fields were standardized.
+
+3. Feature Engineering:
+   I created new variables including:
+   • pressure level (Extreme, High, Medium, Low)
+   • team_goals_before and opp_goals_before
+   • score_diff
+   • simplified shot direction (Left, Centre, Right)
+
+4. Exploratory Data Analysis (EDA):
+   I visualized the distributions of penalty outcomes, pressure levels, directions, and miss types, and explored relationships between pressure, direction, and success.
+
+5. Hypothesis Testing:
+   I applied chi-square tests to examine whether pressure influences penalty success, shot direction, or miss type.
+
+6. Machine Learning (Next Step):
+   I will train a logistic regression model to predict whether a penalty will be scored using the engineered features.
+   
+---
+
 ## Exploratory Data Analysis
 I explored:
 - penalty success distributions  
