@@ -94,8 +94,8 @@ The project follows a structured workflow to ensure the analysis is reproducible
 5. Hypothesis Testing:
    I applied chi-square tests to examine whether pressure influences penalty success, shot direction, or miss type.
 
-6. Machine Learning (Next Step):
-   I will train a logistic regression model to predict whether a penalty will be scored using the engineered features.
+6. Machine Learning :
+   I trained logistic regression models to predict whether a penalty will be scored using the engineered features.
    
 ---
 
@@ -127,28 +127,48 @@ These results show that pressure affects **execution**, not **decision-making**,
 
 ---
 
-## Machine Learning (Next Step)
-The next part of the project is to build a **logistic regression model** to predict whether a penalty will be scored based on features like:
-- pressure  
-- minute  
-- score difference  
-- direction  
-- shot technique  
-- competition  
+## Machine Learning
 
-The goal is to produce a simple, interpretable model and examine which features have the strongest influence.
+Three logistic regression models were evaluated to predict whether a penalty would be scored or missed. A baseline model was first trained to establish a reference point, but it was found to exploit class imbalance by predicting the majority outcome. A balanced model was then introduced to force the model to consider missed penalties. Finally, a custom-weighted model was trained to further tune the trade-off between overall accuracy and recall for missed penalties.
+
+Model performance was evaluated using confusion matrices and recall for the minority class (misses). While overall predictive performance remained modest, the weighted model was able to identify approximately 38% of missed penalties, demonstrating that contextual features provide limited but meaningful information about penalty risk.
+
+---
+
+## Results Summary
+
+Statistical analysis showed that pressure significantly affects penalty success, while shot direction and miss type remain largely unchanged under pressure. Logistic regression confirmed that contextual features alone cannot strongly predict outcomes, but can be used to identify higher-risk penalty situations.
+
+---
+
+## Limitations
+
+Penalty kicks are inherently high-variance events influenced by factors not captured in the dataset, such as goalkeeper behavior, shot power, and individual player tendencies. As a result, there is a natural upper bound on predictive performance. While baseline accuracy appears high due to class imbalance, recall for missed penalties remains modest even after class weighting. This indicates that match-level contextual features provide limited but meaningful information for identifying risk, rather than enabling precise outcome prediction.
 
 ---
 
 ## Reproducibility Instructions
 
-To reproduce this analysis:
-	1.	Download the StatsBomb Open Data repository from: https://github.com/statsbomb/open-data
-	2.	Make sure the events folder is available in your working directory, or update the file paths in the notebook based on where you store the data.
-	3.	Install the required Python packages listed in requirements.txt
-	4.	Open the penalty_analysis.ipynb notebook.
-	5.	Run all cells in order. This will recreate the data loading, feature engineering, EDA, hypothesis tests, and machine learning steps used in this project.
+The cleaned dataset used in this analysis is provided as a CSV file.  
+To reproduce the analysis:
 
+1. Clone this repository.
+2. Install the required Python packages listed in `requirements.txt`.
+3. Open the notebook file.
+4. Run all cells in order.
+
+The raw StatsBomb event data is not included due to licensing restrictions, but the processed dataset ensures full reproducibility of the analysis.
+
+---
+
+## Data Attribution
+
+This project uses publicly available football event data provided by **StatsBomb Open Data**.
+
+Source:
+- StatsBomb Open Data Repository: https://github.com/statsbomb/open-data
+
+The original raw event data is owned by StatsBomb and made available for research and educational purposes. This repository includes only a cleaned and processed subset derived from the original data.
 
 ---
 
